@@ -99,7 +99,7 @@ From this graph and table we can see he is correct 33 times and incorrect 32 tim
  
 
 correct <- 31/ 65
- 
+
 
 Wrong <- 1- correct
 percents <- matrix(c("Correct",correct,"Incorrect",Wrong),2,2,byrow=TRUE)
