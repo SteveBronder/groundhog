@@ -95,9 +95,9 @@ Statistical Inference} %if necessary, replace with your course title
 \end{exercise}
 
 \section*{Answer}
- To evaluate whether Punxsutawney Phil can accurately predict six more weeks of winter we have to define a criteria for evaluation. Our criteria will be whether or not Phil accurately predicted a greater than average number of days with snowfall for the months February and March of each year. If Phil predicts a long winter for a year we will give him 1 point out of a possible 65 points. Phil is limited to 65 points because our data ranges from 1950 to 2014 $(T=65)$. We gather data from the National Climate Data Center\footnote{http://www.ncdc.noaa.gov/cdo-web/datatools/findstation} for the county Punxsutawney Phil is located in, Jefferson County, PA. To find whether Phil saw his shadow we gather data from stormfax\footnote{http://www.stormfax.com/ghogday.htm} on whether or not he saw his shadow for our target years. \\
+ To evaluate whether Punxsutawney Phil can accurately predict six more weeks of winter we have to define a criteria for evaluation. Our criteria will be whether or not Phil accurately predicted a greater than average number of days with temperature below 32 degrees for the months of February and March of each year. If Phil predicts a long winter for a year we will give him 1 point out of a possible 65 points. Phil is limited to 65 points because our data ranges from 1950 to 2014 $(T=65)$. We gather data from the National Climate Data Center\footnote{http://www.ncdc.noaa.gov/cdo-web/datatools/findstation} for the county Punxsutawney Phil is located in, Jefferson County, PA. To find whether Phil saw his shadow we gather data from stormfax\footnote{http://www.stormfax.com/ghogday.htm} on whether or not he saw his shadow for our target years. \\
 
- Our data set is comprised of three variables, The year, the number of days it snowed in the months of February and March, and whether or not Phil saw his shadow for a given year. Lets have a look at our data.
+ Our data set is comprised of three variables, The year, the number of days it is below 32 degrees in the months of February and March, and whether or not Phil saw his shadow for a given year. Lets have a look at our data.
  
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -127,7 +127,7 @@ Statistical Inference} %if necessary, replace with your course title
 \end{kframe}
 \end{knitrout}
  
- Notice that we do not have very many years Phil does not see his shadow (No six weeks of winter). Next we will create a variable for whether the amount of days it snowed was greater than the average amount of days for a given year, whether Phil predicted a Long Winter, and whether his prediction was correct
+ Notice that we do not have very many years Phil does not see his shadow (No six weeks of winter). Next we will create a variable for whether the amount of days it was below 32 degrees was greater than the average amount of days for a given year, whether Phil predicted a Long Winter, and whether his prediction was correct
  
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
