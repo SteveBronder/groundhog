@@ -52,7 +52,7 @@ Statistical Inference} %if necessary, replace with your course title
  
  << data,echo=TRUE,cache=TRUE>>=
  ghog.data<-read.csv("./ghog_clean.csv",header=TRUE)
-
+  
 str(ghog.data)
  
 summary(ghog.data[,2:3])
@@ -62,7 +62,7 @@ summary(ghog.data[,2:3])
  Notice that we do not have very many years Phil does not see his shadow (No six weeks of winter). Next we will create a variable for whether the amount of days it was below 32 degrees was greater than the average amount of days for a given year, whether Phil predicted a Long Winter, and whether his prediction was correct
  
   << snowfall,echo=TRUE,cache=TRUE>>=
- 
+  
  ghog.data$gr.snowfall <- ifelse(ghog.data$Snowfall<mean(ghog.data$Snowfall),
                                  "Long Winter","Short Winter")
  ghog.data$gr.snowfall <- as.factor(ghog.data$gr.snowfall)
@@ -80,7 +80,7 @@ Now that we have created our variables lets generate a bar graph in ggplot2 that
 
 << bargraph,cache=TRUE>>=
  library(ggplot2)
- 
+  
 ghog.graph <- ggplot(ghog.data, aes(ghog.correct,fill=ghog)) + geom_bar(width=.3) +
    theme_bw() + scale_fill_grey(end=.8)
  
@@ -93,12 +93,13 @@ From this graph and table we can see he is correct 33 times and incorrect 32 tim
 \newpage
 << tables,cache=TRUE,results='asis',echo=FALSE>>=
  library(xtable)
+  
  table.g <- xtable(summary(ghog.data)[1:2,4:6],caption="Values for Number of Snowfalls, Groundhog Predictions, and Correct Groundhog Predictions")
  table.g
  
 
-correct <- 33/ 65
-correct <- .507
+correct <- 31/ 65
+
 Wrong <- 1- correct
 percents <- matrix(c("Correct",correct,"Incorrect",Wrong),2,2,byrow=TRUE)
 percents <- as.data.frame(percents)

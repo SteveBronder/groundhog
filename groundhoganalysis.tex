@@ -110,15 +110,15 @@ Statistical Inference} %if necessary, replace with your course title
 ## 'data.frame':	65 obs. of  3 variables:
 ##  $ Year    : int  1950 1951 1952 1953 1954 1955 1956 1957 1958 1959 ...
 ##  $ Snowfall: num  15 13 5 13 15 13 8 13 19 10 ...
-##  $ ghog    : Factor w/ 2 levels "NOShadow","Shadow": 1 1 2 2 2 2 2 2 2 2 ...
+##  $ ghog    : Factor w/ 2 levels "NOShadow","Shadow": 1 2 2 2 2 2 2 2 2 2 ...
 \end{verbatim}
 \begin{alltt}
 \hlkwd{summary}\hlstd{(ghog.data[,}\hlnum{2}\hlopt{:}\hlnum{3}\hlstd{])}
 \end{alltt}
 \begin{verbatim}
 ##     Snowfall          ghog   
-##  Min.   : 5.0   NOShadow: 6  
-##  1st Qu.:15.0   Shadow  :59  
+##  Min.   : 5.0   NOShadow:12  
+##  1st Qu.:15.0   Shadow  :53  
 ##  Median :18.0                
 ##  Mean   :19.1                
 ##  3rd Qu.:25.0                
@@ -168,29 +168,29 @@ From this graph and table we can see he is correct 33 times and incorrect 32 tim
 
 \newpage
 % latex table generated in R 3.1.1 by xtable 1.7-4 package
-% Tue Oct 21 03:23:00 2014
+% Tue Oct 21 18:25:28 2014
 \begin{table}[ht]
 \centering
 \begin{tabular}{rlll}
   \hline
  &       gr.snowfall &     gr.ghog.predict &  ghog.correct \\ 
   \hline
-1 & Long Winter :35   & Long Winter :59   & Correct:33   \\ 
-  2 & Short Winter:30   & Short Winter: 6   & Wrong  :32   \\ 
+1 & Long Winter :35   & Long Winter :53   & Correct:31   \\ 
+  2 & Short Winter:30   & Short Winter:12   & Wrong  :34   \\ 
    \hline
 \end{tabular}
 \caption{Values for Number of Snowfalls, Groundhog Predictions, and Correct Groundhog Predictions} 
 \end{table}
 % latex table generated in R 3.1.1 by xtable 1.7-4 package
-% Tue Oct 21 03:23:00 2014
+% Tue Oct 21 18:25:28 2014
 \begin{table}[ht]
 \centering
 \begin{tabular}{rll}
   \hline
  & Prediction & Accuracy \\ 
   \hline
-1 & Correct & 0.507 \\ 
-  2 & Incorrect & 0.493 \\ 
+1 & Correct & 0.476923076923077 \\ 
+  2 & Incorrect & 0.523076923076923 \\ 
    \hline
 \end{tabular}
 \caption{Percent of Correct and Incorrect Predictions} 
