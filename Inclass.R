@@ -34,3 +34,19 @@ t.test(daysbelow32[ghog=="NOShadow"],daysbelow32[ghog=="Shadow"],alternative=c("
 t.test(daysbelow32[ghog=="NOShadow"],daysbelow32[ghog=="Shadow"],alternative=c("greater"))
 
 pt(-.3112,20.11)
+
+#Histograms to check normality
+par(mfrow=c(2,2))
+hist(daysbelow32[ghog=="NOShadow"],nclass=8)
+hist(daysbelow32[ghog=="Shadow"],nclass=8)
+
+#Density plot to check normality
+plot(density(daysbelow32[ghog=="NOShadow"],adjust=2))
+plot(density(daysbelow32[ghog=="Shadow"],adjust=2))
+
+#HOMEWORK 
+# 1. Apply a two-sample t-test to your groundhog data.
+# 2, Check normality assumption
+# 3. State Appropriate null and alternative hypothesis
+# 4. Compute test statistics df and p-value using t-test
+# 5. Provide an in-context conclusion in plain language
