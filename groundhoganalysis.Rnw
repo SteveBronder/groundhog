@@ -54,7 +54,7 @@ Statistical Inference} %if necessary, replace with your course title
  ghog.data<-read.csv("./ghog_clean.csv",header=TRUE)
   
 str(ghog.data)
- 
+  
 summary(ghog.data[,2:3])
  
  @
@@ -62,16 +62,16 @@ summary(ghog.data[,2:3])
  Notice that we do not have very many years Phil does not see his shadow (No six weeks of winter). Next we will create a variable for whether the amount of days it was below 32 degrees was greater than the average amount of days for a given year, whether Phil predicted a Long Winter, and whether his prediction was correct
  
   << snowfall,echo=TRUE,cache=TRUE>>=
-  
- ghog.data$gr.snowfall <- ifelse(ghog.data$Snowfall<mean(ghog.data$Snowfall),
+   
+ ghog.data$gr.daysbelow32 <- ifelse(ghog.data$daysbelow32<mean(ghog.data$daysbelow32),
                                  "Long Winter","Short Winter")
- ghog.data$gr.snowfall <- as.factor(ghog.data$gr.snowfall)
+ ghog.data$gr.daysbelow32 <- as.factor(ghog.data$gr.daysbelow32)
  
 ghog.data$gr.ghog.predict <- ifelse(ghog.data$ghog=="Shadow",
                                     "Long Winter","Short Winter")
 ghog.data$gr.ghog.predict <- as.factor(ghog.data$gr.ghog.predict)
 
-ghog.data$ghog.correct <- ifelse(ghog.data$gr.ghog.predict==ghog.data$gr.snowfall,
+ghog.data$ghog.correct <- ifelse(ghog.data$gr.ghog.predict==ghog.data$gr.daysbelow32,
                                  "Correct","Wrong")
 ghog.data$ghog.correct <- as.factor(ghog.data$ghog.correct)
  @
@@ -93,13 +93,12 @@ From this graph and table we can see he is correct 33 times and incorrect 32 tim
 \newpage
 << tables,cache=TRUE,results='asis',echo=FALSE>>=
  library(xtable)
-  
- table.g <- xtable(summary(ghog.data)[1:2,4:6],caption="Values for Number of Snowfalls, Groundhog Predictions, and Correct Groundhog Predictions")
+ table.g <- xtable(summary(ghog.data)[1:2,4:6],caption="Values for Number of days below 32, Groundhog Predictions, and Correct Groundhog Predictions")
  table.g
- 
+  
 
-correct <- 31/ 65
-correct <- .477
+correct <- 32/ 65
+correct <- .492
 
 Wrong <- 1- correct
 percents <- matrix(c("Correct",correct,"Incorrect",Wrong),2,2,byrow=TRUE)
