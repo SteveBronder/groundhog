@@ -37,12 +37,12 @@ pt(-.3112,20.11)
 
 #Histograms to check normality
 par(mfrow=c(2,2))
-hist(daysbelow32[ghog=="NOShadow"],nclass=8)
-hist(daysbelow32[ghog=="Shadow"],nclass=8)
+hist(daysbelow32[ghog=="NOShadow"],nclass=8,main="Historgram of No Shadow")
+hist(daysbelow32[ghog=="Shadow"],nclass=8,main="Historgram of Shadow")
 
 #Density plot to check normality
-plot(density(daysbelow32[ghog=="NOShadow"],adjust=2))
-plot(density(daysbelow32[ghog=="Shadow"],adjust=2))
+plot(density(daysbelow32[ghog=="NOShadow"],adjust=2),main="Density of No Shadow")
+plot(density(daysbelow32[ghog=="Shadow"],adjust=2),main="Density of Shadow")
 
 #HOMEWORK 
 # 1. Apply a two-sample t-test to your groundhog data.
