@@ -44,6 +44,12 @@ hist(daysbelow32[ghog=="Shadow"],nclass=8,main="Historgram of Shadow")
 plot(density(daysbelow32[ghog=="NOShadow"],adjust=2),main="Density of No Shadow")
 plot(density(daysbelow32[ghog=="Shadow"],adjust=2),main="Density of Shadow")
 
+
+pretty <- ggplot(Ghog2,aes(colour=ghog))+scale_color_manual(values = wes.palette(3, "GrandBudapest"))+
+  geom_density(aes(x=daysbelow32),adjust=1.5,,size=1.5 )  + ggtitle("Density of Number of Days Below 32")+
+    theme(axis.title.x = element_blank(), axis.title.y = element_blank())+
+   theme(plot.title = element_text(size = rel(2))) + xlim(0,40)
+pretty
 #HOMEWORK 
 # 1. Apply a two-sample t-test to your groundhog data.
 # 2, Check normality assumption
