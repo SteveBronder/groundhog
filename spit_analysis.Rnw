@@ -1,0 +1,86 @@
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+ 
+\documentclass[12pt]{article}
+ 
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+ \usepackage{amsfonts}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+ 
+\newenvironment{theorem}[2][Theorem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{question}[2][Question]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{BaseCase}[2][Base Case]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{Answer}[2][Answer]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{Sketch}[2][Sketch]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+ 
+\begin{document}
+ 
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+ 
+\title{Homework 1}%replace X with the appropriate number
+\author{Steve Bronder\\ %replace with your name
+Statistical Inference} %if necessary, replace with your course title
+ 
+\maketitle
+ 
+\begin{exercise}{1}Using the dataset for spitting candy test whether there is an difference between groups with two analysis packages.
+\end{exercise}
+
+\section*{Answer}
+ To answer this question in R and excel we load up the spit data and perform an ANOVA. The ANOVA has a null that there is no difference between groups and an alternative hypothesis of differences between groups.
+ 
+ <<spitR,cache=TRUE>>=
+ spit <- read.csv("./spit_data.csv",header=TRUE)
+
+attach(spit)
+
+# give boxplot of spit
+boxplot(spit)
+@
+\newpage
+<<spitanova,cache=TRUE,results='asis'>>=
+# load in package reshape2
+library(reshape2)
+
+# Use melt function to place data in long format
+spit.take <- melt(spit,measure.vars=c("Steve","Mark","Mike","Adam",
+                                      "Jordan","Rich","Anthony","Lacy"))
+
+
+#Get summary results from aov
+xtable::xtable(summary(aov(value~variable,data=spit.take)),
+               caption="R Output for ANOVA on Spit Data")
+@
+
+
+<<spitexcel,cache=TRUE,results='asis'>>=
+excel.anova <-  read.csv("./excel_spit_anova.csv")
+ 
+ xtable::xtable(excel.anova,caption="Excel Output for ANOVA on Spit Data")
+ 
+ @
+Tables one and two have our results for the ANOVA test in R and Excel, respectively. Because our test has a p-value near 10\% we do not reject our null for either test and conclude there is a difference between groups. I also implimented a Kruskal-Wallis rank sum test in order to account for non-normality, but those results were similar to our results here and so are not shown. It should be noted that with only five observations for each group it is hard to say whether a difference between groups actually exists.
+% --------------------------------------------------------------
+%     You don't have to mess with anything below this line.
+% --------------------------------------------------------------
+ 
+\end{document}
