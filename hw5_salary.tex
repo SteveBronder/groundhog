@@ -1,0 +1,453 @@
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+ 
+\documentclass[12pt]{article}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+ 
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+ \usepackage{amsfonts}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+ 
+\newenvironment{theorem}[2][Theorem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{question}[2][Question]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{BaseCase}[2][Base Case]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{Answer}[2][Answer]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{Sketch}[2][Sketch]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+ 
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+ 
+\title{Homework 1}%replace X with the appropriate number
+\author{Steve Bronder\\ %replace with your name
+Statistical Inference} %if necessary, replace with your course title
+ 
+\maketitle
+ 
+\begin{exercise}{1}Normal-normal model
+\end{exercise}
+\begin{problem}{a}
+Check the sample size with length(m.sals). Plot a histogram of this data and commend on whether you feel it is appropriate to use a normal model for these data
+\end{problem}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{sal.dat} \hlkwb{<-} \hlkwd{read.csv}\hlstd{(}\hlstr{"./hw_5_data.csv"}\hlstd{,}\hlkwc{header}\hlstd{=}\hlnum{TRUE}\hlstd{)}
+
+\hlcom{#fix rand num generator}
+\hlkwd{set.seed}\hlstd{(}\hlnum{1234}\hlstd{)}
+
+\hlstd{m.sals} \hlkwb{<-} \hlstd{sal.dat[,}\hlnum{6}\hlstd{][sal.dat[,}\hlnum{3}\hlstd{]}\hlopt{==}\hlnum{1}\hlstd{]}
+
+\hlkwd{length}\hlstd{(m.sals)}
+\end{alltt}
+\begin{verbatim}
+## [1] 34
+\end{verbatim}
+\begin{alltt}
+\hlkwd{hist}\hlstd{(m.sals,}\hlkwc{breaks}\hlstd{=}\hlnum{20}\hlstd{)}
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=\maxwidth]{figure/parta1-1} 
+
+}
+
+
+
+\end{knitrout}
+ The data appears heavily skewed left. As such I would not recommend a normal model for this data.
+ 
+ \begin{problem}{b}
+ If we assume the normal model to hold for this data, and that the standard deviation of this model is $\sigma=1.2$, what is the posterior distribution of $\mu$, the unkown mean of the model? Use a conjugate prior for $\mu$ with mean 20 and variance 49.
+ \end{problem}
+ 
+ To answer this question we will find the number of observations, the mean and standard deviation of the original data, and then compute the posterior mean of mu with the given mean and variance for the conjugate.
+ 
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{#number of observations}
+\hlstd{n} \hlkwb{<-} \hlkwd{length}\hlstd{(m.sals)}
+
+\hlcom{# mean of data}
+\hlstd{mean.d} \hlkwb{<-} \hlkwd{mean}\hlstd{(m.sals)}
+
+\hlcom{#standard deviation of data}
+\hlstd{sigma} \hlkwb{<-} \hlnum{1.2}
+
+\hlcom{# Mean of mu is gamma}
+\hlstd{gamma} \hlkwb{<-} \hlnum{20000}
+
+\hlcom{# variance of mu is tau}
+\hlstd{tau} \hlkwb{<-} \hlnum{49}
+
+\hlcom{#mean of mu}
+\hlstd{mu.m} \hlkwb{<-} \hlstd{(tau} \hlopt{*} \hlstd{n} \hlopt{*} \hlstd{mean.d} \hlopt{+} \hlstd{sigma}\hlopt{^}\hlnum{2} \hlopt{*} \hlstd{gamma)}\hlopt{/}\hlstd{(tau} \hlopt{*} \hlstd{n} \hlopt{+} \hlstd{sigma}\hlopt{^}\hlnum{2}\hlstd{)}
+
+\hlstd{mu.m}
+\end{alltt}
+\begin{verbatim}
+## [1] 17923.53
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+ In the next section we will find the posterior by simulating from a normal distribution given the updated mean.
+ 
+ \begin{problem}{c}
+ In a single plot, draw the posterior and prior distributions for this problem. Comment briefly on how the data have "updated" the prior distribution.
+ \end{problem}
+ 
+ First, we will draw random samples from the prior and posterior distributions of the data.Then use \textbf{reshape2} to melt the data into long format so both distributions can be easily graphed  with the \textbf{ggplot2} package.
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{library}\hlstd{(ggplot2)}
+\hlkwd{library}\hlstd{(reshape2)}
+
+\hlcom{# posterior draws}
+\hlstd{post.draws} \hlkwb{<-} \hlkwd{rnorm}\hlstd{(}\hlnum{5000}\hlstd{,}\hlkwc{mean}\hlstd{=mu.m,}\hlkwc{sd}\hlstd{=}\hlnum{1.2}\hlstd{)}
+
+\hlcom{#Original draws}
+\hlstd{prior.draws} \hlkwb{<-} \hlkwd{rnorm}\hlstd{(}\hlnum{5000}\hlstd{,}\hlkwc{mean}\hlstd{=gamma,}\hlkwc{sd}\hlstd{=}\hlkwd{sqrt}\hlstd{(tau))}
+
+\hlcom{#Bind both draws together}
+\hlstd{post.prior.draws} \hlkwb{<-} \hlkwd{as.data.frame}\hlstd{(}\hlkwd{cbind}\hlstd{(post.draws,prior.draws))}
+
+\hlcom{# melt draws}
+\hlstd{pp.d.melt} \hlkwb{<-} \hlkwd{melt}\hlstd{(post.prior.draws)}
+\end{alltt}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# No id variables; using all as measure variables}}\begin{alltt}
+\hlcom{#plot densities}
+\hlstd{den.draws} \hlkwb{<-} \hlkwd{ggplot}\hlstd{(pp.d.melt,}\hlkwd{aes}\hlstd{(}\hlkwc{x}\hlstd{=value,}\hlkwc{group}\hlstd{=variable))} \hlopt{+}
+ \hlkwd{geom_density}\hlstd{(}\hlkwd{aes}\hlstd{(}\hlkwc{fill}\hlstd{=variable,}\hlkwc{y}\hlstd{=..scaled..))}
+
+\hlstd{den.draws}
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=\maxwidth]{figure/partc1-1} 
+
+}
+
+
+
+\end{knitrout}
+
+The posterior draw has updated the prior by shifting the posterior downwards and widening the distribution. This is due to the low value we gave on $\mu$'s prior and the uncertainty we placed into $\mu$'s variance.
+
+\begin{problem}{d}
+Use the posterior distribution of $\mu$ to find a 95\% credible interval for $\mu$.
+\end{problem}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{#95 percent credible interval}
+\hlkwd{quantile}\hlstd{(post.draws,}\hlkwd{c}\hlstd{(}\hlnum{.025}\hlstd{,}\hlnum{.975}\hlstd{))}
+\end{alltt}
+\begin{verbatim}
+##     2.5%    97.5% 
+## 17921.22 17925.86
+\end{verbatim}
+\begin{alltt}
+\hlcom{#graph of posterior with 95 percent credible interval}
+\hlstd{post.dens} \hlkwb{<-} \hlkwd{ggplot}\hlstd{(}\hlkwd{as.data.frame}\hlstd{(post.draws),}\hlkwd{aes}\hlstd{(}\hlkwc{x}\hlstd{=post.draws))} \hlopt{+}
+  \hlkwd{geom_density}\hlstd{(}\hlkwc{fill}\hlstd{=}\hlstr{"lightblue"}\hlstd{)} \hlopt{+}
+  \hlkwd{geom_vline}\hlstd{(}\hlkwc{xintercept} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{17921.22}\hlstd{,} \hlnum{17925.86}\hlstd{),}\hlkwc{linetype}\hlstd{=}\hlstr{"longdash"} \hlstd{)}
+
+\hlstd{post.dens}
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=\maxwidth]{figure/partd1-1} 
+
+}
+
+
+
+\end{knitrout}
+
+\begin{problem}{e}
+Simulate 5000 draws from $\tilde{y}$ from the posterior predictive distribution and plot them in a histogram. Use these draws to find the probability that the next male sampled will have a salary less than \$15,000
+\end{problem}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{#probability of salary less than 15000}
+\hlstd{sal.less} \hlkwb{<-} \hlkwd{rnorm}\hlstd{(}\hlnum{5000}\hlstd{,post.draws,}\hlkwc{sd}\hlstd{=}\hlnum{1.2}\hlstd{)}
+
+\hlcom{#histogram}
+\hlkwd{hist}\hlstd{(sal.less)}
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=\maxwidth]{figure/parte1-1} 
+
+}
+
+
+\begin{kframe}\begin{alltt}
+\hlcom{#probability of salary less than 15000}
+\hlkwd{ecdf}\hlstd{(sal.less)(}\hlnum{15000}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] 0
+\end{verbatim}
+\begin{alltt}
+\hlcom{# zero percent chance?}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+\begin{exercise}{2}Poisson-gamma model
+\end{exercise}
+
+\begin{problem}{a}
+Check the sample size with length(m.sals). Plot a histogram of this data and commend on whether you feel it is appropriate to use a Poisson model for these data
+\end{problem}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{m.year} \hlkwb{<-} \hlstd{sal.dat[,}\hlnum{5}\hlstd{][sal.dat[,}\hlnum{3}\hlstd{]}\hlopt{==}\hlnum{1}\hlstd{]}
+
+\hlcom{#Check length}
+\hlkwd{length}\hlstd{(m.year)}
+\end{alltt}
+\begin{verbatim}
+## [1] 34
+\end{verbatim}
+\begin{alltt}
+\hlcom{# histogram of data}
+\hlkwd{hist}\hlstd{(m.year)}
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=\maxwidth]{figure/parta2-1} 
+
+}
+
+
+\begin{kframe}\begin{alltt}
+\hlcom{# A poisson may be reasonable and I would recommend it}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+ The data appears heavily skewed left. As such I would not recommend a poisson model for this data.
+ 
+ \begin{problem}{b}
+ We assume the Poisson model to hold for this data and $\lambda$ is unkown. Assume the prior on $\lambda$ is conjugate with mean 3 and variance 30. Find lambda
+ \end{problem}
+ 
+ To answer this question we will use the gamma prior to find the value of lambda.
+ 
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# mean of gamma}
+\hlstd{gam.mean} \hlkwb{<-} \hlnum{3}
+
+\hlcom{# var of gamma }
+
+\hlstd{var.gamma} \hlkwb{<-} \hlnum{30}
+
+\hlcom{# posterior mean of lambda}
+
+\hlstd{lam} \hlkwb{<-} \hlstd{(n}\hlopt{/}\hlstd{(n}\hlopt{+}\hlstd{var.gamma))} \hlopt{*} \hlstd{(}\hlkwd{sum}\hlstd{(m.year)}\hlopt{/}\hlstd{n)} \hlopt{+} \hlstd{(var.gamma}\hlopt{/}\hlstd{(n}\hlopt{+}\hlstd{var.gamma))}\hlopt{*}\hlstd{(gam.mean}\hlopt{/}\hlstd{var.gamma)}
+
+\hlstd{lam}
+\end{alltt}
+\begin{verbatim}
+## [1] 4.46875
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+ In the next section we will find the posterior by simulating from a Poisson distribution given the updated $\lambda$.
+ 
+ \begin{problem}{c}
+ In a single plot, draw the posterior and prior distributions for this problem. Comment briefly on how the data have "updated" the prior distribution.
+ \end{problem}
+ 
+ First, we will draw random samples from the prior and posterior distributions of the data.Then use \textbf{reshape2} to melt the data into long format so both distributions can be easily graphed  with the \textbf{ggplot2} package.
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{#posterior for poisson}
+
+\hlstd{post.poi} \hlkwb{<-} \hlkwd{rpois}\hlstd{(}\hlnum{5000}\hlstd{,lam)}
+
+\hlcom{#prior for poisson}
+
+\hlstd{prior.poi} \hlkwb{<-} \hlkwd{rpois}\hlstd{(}\hlnum{5000}\hlstd{,gam.mean)}
+
+\hlcom{#Bind both draws together}
+
+\hlstd{post.orig.draws} \hlkwb{<-} \hlkwd{as.data.frame}\hlstd{(}\hlkwd{cbind}\hlstd{(post.poi,prior.poi))}
+
+\hlcom{# melt draws}
+\hlstd{pp.d.melt} \hlkwb{<-} \hlkwd{melt}\hlstd{(post.orig.draws)}
+\end{alltt}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# No id variables; using all as measure variables}}\begin{alltt}
+\hlcom{#plot densities}
+\hlstd{poi.draws} \hlkwb{<-} \hlkwd{ggplot}\hlstd{(pp.d.melt,}\hlkwd{aes}\hlstd{(}\hlkwc{x}\hlstd{=value,}\hlkwc{group}\hlstd{=variable))} \hlopt{+}
+ \hlkwd{geom_density}\hlstd{(}\hlkwd{aes}\hlstd{(}\hlkwc{fill}\hlstd{=}\hlkwd{factor}\hlstd{(variable),}\hlkwc{adjust}\hlstd{=}\hlnum{10}\hlstd{))}
+
+\hlstd{poi.draws}
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=\maxwidth]{figure/partc2-1} 
+
+}
+
+
+
+\end{knitrout}
+
+The posterior draw has updated the prior by shifting the posterior updward and widening the distribution. This is due to the high value we gave on $\lambda$'s prior and the uncertainty we placed into $\lambda$'s variance.
+
+\begin{problem}{d}
+Use the posterior distribution of $\mu$ to find a 95\% credible interval for $\lambda$.
+\end{problem}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{#95 percent credible interval}
+\hlkwd{quantile}\hlstd{(post.poi,}\hlkwd{c}\hlstd{(}\hlnum{.025}\hlstd{,}\hlnum{.975}\hlstd{))}
+\end{alltt}
+\begin{verbatim}
+##  2.5% 97.5% 
+##     1     9
+\end{verbatim}
+\begin{alltt}
+\hlcom{#graph of posterior with 95 percent credible interval}
+\hlstd{post.dens} \hlkwb{<-} \hlkwd{ggplot}\hlstd{(}\hlkwd{as.data.frame}\hlstd{(post.poi),}\hlkwd{aes}\hlstd{(}\hlkwc{x}\hlstd{=post.poi))} \hlopt{+}
+  \hlkwd{geom_density}\hlstd{(}\hlkwc{fill}\hlstd{=}\hlstr{"lightblue"}\hlstd{,}\hlkwc{adjust}\hlstd{=}\hlnum{5}\hlstd{)} \hlopt{+}
+  \hlkwd{geom_vline}\hlstd{(}\hlkwc{xintercept} \hlstd{=} \hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{,}\hlnum{9}\hlstd{),}\hlkwc{linetype}\hlstd{=}\hlstr{"longdash"} \hlstd{)}
+
+\hlstd{post.dens}
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=\maxwidth]{figure/partd2-1} 
+
+}
+
+
+
+\end{knitrout}
+\begin{problem}{e}
+Simulate 5000 draws from $\tilde{y}$ from the posterior predictive distribution and plot them in a histogram. Use these draws to find the probability that the next male sampled will have a spend more than 10 years at his job.
+\end{problem}
+
+
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{#predictive prior}
+\hlstd{predic.p.gamma} \hlkwb{<-} \hlkwd{rpois}\hlstd{(}\hlnum{5000}\hlstd{,post.poi)}
+
+
+\hlkwd{hist}\hlstd{(predic.p.gamma)}
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=\maxwidth]{figure/parte2-1} 
+
+}
+
+
+\begin{kframe}\begin{alltt}
+\hlcom{# Prob that next male will have more than 10 years on job}
+\hlnum{1}\hlopt{-}\hlkwd{ecdf}\hlstd{(predic.p.gamma)(}\hlnum{10}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.037
+\end{verbatim}
+\begin{alltt}
+\hlcom{# three percent chance that someone has spent more than 10 years at the job}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+With less than a 3\% chance someone is at their job for more than 10 years we can not say this is a likely circumstance.
+
+% --------------------------------------------------------------
+%     You don't have to mess with anything below this line.
+% --------------------------------------------------------------
+ 
+\end{document}

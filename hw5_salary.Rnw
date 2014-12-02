@@ -1,0 +1,276 @@
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+ 
+\documentclass[12pt]{article}
+ 
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+ \usepackage{amsfonts}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+ 
+\newenvironment{theorem}[2][Theorem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{question}[2][Question]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{BaseCase}[2][Base Case]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{Answer}[2][Answer]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{Sketch}[2][Sketch]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+ 
+\begin{document}
+ 
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+ 
+\title{Homework 1}%replace X with the appropriate number
+\author{Steve Bronder\\ %replace with your name
+Statistical Inference} %if necessary, replace with your course title
+ 
+\maketitle
+ 
+\begin{exercise}{1}Normal-normal model
+\end{exercise}
+\begin{problem}{a}
+Check the sample size with length(m.sals). Plot a histogram of this data and commend on whether you feel it is appropriate to use a normal model for these data
+\end{problem}
+<<parta1,cache=TRUE,fig.width=5,fig.align='center',fig.height=5>>=
+sal.dat <- read.csv("./hw_5_data.csv",header=TRUE)
+
+#fix rand num generator
+set.seed(1234)
+
+m.sals <- sal.dat[,6][sal.dat[,3]==1]
+
+length(m.sals)
+
+hist(m.sals,breaks=20)
+@
+ The data appears heavily skewed left. As such I would not recommend a normal model for this data.
+ 
+ \begin{problem}{b}
+ If we assume the normal model to hold for this data, and that the standard deviation of this model is $\sigma=1.2$, what is the posterior distribution of $\mu$, the unkown mean of the model? Use a conjugate prior for $\mu$ with mean 20 and variance 49.
+ \end{problem}
+ 
+ To answer this question we will find the number of observations, the mean and standard deviation of the original data, and then compute the posterior mean of mu with the given mean and variance for the conjugate.
+ 
+ <<partb1,cache=TRUE>>=
+
+#number of observations
+n <- length(m.sals)
+
+# mean of data
+mean.d <- mean(m.sals)
+
+#standard deviation of data
+sigma <- 1.2
+
+# Mean of mu is gamma
+gamma <- 20000
+
+# variance of mu is tau
+tau <- 49
+
+#mean of mu
+mu.m <- (tau * n * mean.d + sigma^2 * gamma)/(tau * n + sigma^2)
+
+mu.m
+@
+ In the next section we will find the posterior by simulating from a normal distribution given the updated mean.
+ 
+ \begin{problem}{c}
+ In a single plot, draw the posterior and prior distributions for this problem. Comment briefly on how the data have "updated" the prior distribution.
+ \end{problem}
+ 
+ First, we will draw random samples from the prior and posterior distributions of the data.Then use \textbf{reshape2} to melt the data into long format so both distributions can be easily graphed  with the \textbf{ggplot2} package.
+ <<partc1,cache=TRUE,fig.width=5,fig.align='center',fig.height=5>>=
+library(ggplot2)
+library(reshape2)
+
+# posterior draws
+post.draws <- rnorm(5000,mean=mu.m,sd=1.2)
+
+#Original draws
+prior.draws <- rnorm(5000,mean=gamma,sd=sqrt(tau))
+
+#Bind both draws together
+post.prior.draws <- as.data.frame(cbind(post.draws,prior.draws))
+
+# melt draws
+pp.d.melt <- melt(post.prior.draws)
+
+#plot densities
+den.draws <- ggplot(pp.d.melt,aes(x=value,group=variable)) +
+  geom_density(aes(fill=variable,y=..scaled..)) 
+
+den.draws
+
+@
+
+The posterior draw has updated the prior by shifting the posterior downwards and widening the distribution. This is due to the low value we gave on $\mu$'s prior and the uncertainty we placed into $\mu$'s variance.
+
+\begin{problem}{d}
+Use the posterior distribution of $\mu$ to find a 95\% credible interval for $\mu$.
+\end{problem}
+
+<<partd1,cache=TRUE,fig.width=5,fig.align='center',fig.height=5>>=
+
+#95 percent credible interval
+quantile(post.draws,c(.025,.975))
+
+
+#graph of posterior with 95 percent credible interval
+post.dens <- ggplot(as.data.frame(post.draws),aes(x=post.draws)) +
+  geom_density(fill="lightblue") +
+  geom_vline(xintercept = c(17921.22, 17925.86),linetype="longdash" )
+
+post.dens
+@
+
+\begin{problem}{e}
+Simulate 5000 draws from $\tilde{y}$ from the posterior predictive distribution and plot them in a histogram. Use these draws to find the probability that the next male sampled will have a salary less than \$15,000
+\end{problem}
+
+<<parte1,cache=TRUE,fig.width=5,fig.align='center',fig.height=5>>=
+#probability of salary less than 15000
+sal.less <- rnorm(5000,post.draws,sd=1.2)
+
+#histogram
+hist(sal.less)
+
+#probability of salary less than 15000
+ecdf(sal.less)(15000)
+# zero percent chance?
+
+
+@
+
+
+\begin{exercise}{2}Poisson-gamma model
+\end{exercise}
+
+\begin{problem}{a}
+Check the sample size with length(m.sals). Plot a histogram of this data and commend on whether you feel it is appropriate to use a Poisson model for these data
+\end{problem}
+<<parta2,cache=TRUE,fig.width=5,fig.align='center',fig.height=5>>=
+m.year <- sal.dat[,5][sal.dat[,3]==1]
+
+#Check length
+length(m.year)
+
+# histogram of data
+hist(m.year)
+# A poisson may be reasonable and I would recommend it
+
+@
+ The data appears heavily skewed left. As such I would not recommend a poisson model for this data.
+ 
+ \begin{problem}{b}
+ We assume the Poisson model to hold for this data and $\lambda$ is unkown. Assume the prior on $\lambda$ is conjugate with mean 3 and variance 30. Find lambda
+ \end{problem}
+ 
+ To answer this question we will use the gamma prior to find the value of lambda.
+ 
+ <<partb2,cache=TRUE>>=
+
+# mean of gamma
+gam.mean <- 3
+
+# var of gamma 
+
+var.gamma <- 30
+
+# posterior mean of lambda
+
+lam <- (n/(n+var.gamma)) * (sum(m.year)/n) + (var.gamma/(n+var.gamma))*(gam.mean/var.gamma)
+
+lam
+@
+ In the next section we will find the posterior by simulating from a Poisson distribution given the updated $\lambda$.
+ 
+ \begin{problem}{c}
+ In a single plot, draw the posterior and prior distributions for this problem. Comment briefly on how the data have "updated" the prior distribution.
+ \end{problem}
+ 
+ First, we will draw random samples from the prior and posterior distributions of the data.Then use \textbf{reshape2} to melt the data into long format so both distributions can be easily graphed  with the \textbf{ggplot2} package.
+ <<partc2,cache=TRUE,fig.width=5,fig.align='center',fig.height=5>>=
+#posterior for poisson
+
+post.poi <- rpois(5000,lam)
+
+#prior for poisson
+
+prior.poi <- rpois(5000,gam.mean)
+
+#Bind both draws together
+
+post.orig.draws <- as.data.frame(cbind(post.poi,prior.poi))
+
+# melt draws
+pp.d.melt <- melt(post.orig.draws)
+
+#plot densities
+poi.draws <- ggplot(pp.d.melt,aes(x=value,group=variable)) +
+  geom_density(aes(fill=factor(variable),adjust=10)) 
+
+poi.draws
+
+@
+
+The posterior draw has updated the prior by shifting the posterior updward and widening the distribution. This is due to the high value we gave on $\lambda$'s prior and the uncertainty we placed into $\lambda$'s variance.
+
+\begin{problem}{d}
+Use the posterior distribution of $\mu$ to find a 95\% credible interval for $\lambda$.
+\end{problem}
+
+<<partd2,cache=TRUE,fig.width=5,fig.align='center',fig.height=5>>=
+
+
+#95 percent credible interval
+quantile(post.poi,c(.025,.975))
+
+#graph of posterior with 95 percent credible interval
+post.dens <- ggplot(as.data.frame(post.poi),aes(x=post.poi)) +
+  geom_density(fill="lightblue",adjust=5) +
+  geom_vline(xintercept = c(1,9),linetype="longdash" )
+
+post.dens
+@
+\begin{problem}{e}
+Simulate 5000 draws from $\tilde{y}$ from the posterior predictive distribution and plot them in a histogram. Use these draws to find the probability that the next male sampled will have a spend more than 10 years at his job.
+\end{problem}
+
+
+
+<<parte2,cache=TRUE,fig.width=5,fig.align='center',fig.height=5>>=
+#predictive prior
+predic.p.gamma <- rpois(5000,post.poi)
+
+
+hist(predic.p.gamma)
+
+# Prob that next male will have more than 10 years on job
+1-ecdf(predic.p.gamma)(10)
+# three percent chance that someone has spent more than 10 years at the job
+
+@
+With less than a 3\% chance someone is at their job for more than 10 years we can not say this is a likely circumstance.
+
+% --------------------------------------------------------------
+%     You don't have to mess with anything below this line.
+% --------------------------------------------------------------
+ 
+\end{document}

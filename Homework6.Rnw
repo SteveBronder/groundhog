@@ -1,0 +1,209 @@
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+ 
+\documentclass[12pt]{article}
+ 
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+ \usepackage{amsfonts}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+ 
+\newenvironment{theorem}[2][Theorem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{question}[2][Question]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{BaseCase}[2][Base Case]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{Answer}[2][Answer]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{Sketch}[2][Sketch]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+ 
+\begin{document}
+ 
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+ 
+\title{Homework 6}%replace X with the appropriate number
+\author{Steve Bronder\\ %replace with your name
+Statistical Inference} %if necessary, replace with your course title
+ 
+\maketitle
+ 
+\begin{exercise}{1}Let Y have a t-distribution with 9 degrees of freedom. Using (only) repeated samples from a standard normal distribution, find the following:
+
+\begin{itemize}
+  \item $P(Y<-1)$
+    \item $P(-1<Y<1)$
+      \item $P(Y>2)$
+\end{itemize}
+\end{exercise}
+
+
+\begin{Answer}{1}
+
+For this exercise a for loop is used that takes ten samples from the normal distribuion and calculates the t statistic over ten thousand iterations. We then use the \texttt{ecdf()} function to compute the emirical cumulative distribution for each probability.
+<<ans1,cache=TRUE,tidy=TRUE>>=
+Y.t <- NULL
+
+for (i in 1:10000){
+Ynorm <- rnorm(10)
+
+Ynorm.mean <- mean(Ynorm)
+
+Ynorm.var <- var(Ynorm)
+
+Y.t[i] <- (Ynorm.mean)/(Ynorm.var/sqrt(10))
+}
+
+# Y < -1
+ecdf(Y.t)(-1)
+
+# -1 < Y < 1
+1-ecdf(Y.t)(-1)-(1-ecdf(Y.t)(1))
+
+# Y > 2
+1-ecdf(Y.t)(2)
+@
+
+\begin{itemize}
+  \item $P(Y<-1)=17.72\%$
+    \item $P(-1<Y<1)=64.27\%$
+      \item $P(Y>2)=6.24\%$
+\end{itemize}
+\end{Answer}
+
+\begin{exercise}{2}
+Use the \texttt{pt()} command in \textbf{R} to confirm your answers for exercise 1. Then, state how each of the three probabilities would change (greater/less than) if the random variable $Y$ were replaced with:
+\begin{itemize}
+  \item a standard normal variable $Z$
+  \item a $t$-distributed random variable $w$, with 4 degrees of freedom
+\end{itemize}
+\end{exercise}
+
+\begin{Answer}{2} 
+
+Checking answers
+<<ans2,cache=TRUE>>=
+
+# 
+# Y < -1
+pt(-1,9)
+
+# -1 < Y < 1
+pt(-1,9,lower.tail=FALSE)-pt(1,9,lower.tail=FALSE)
+
+# Y > 2
+1-pt(2,9)
+@
+These answers are close the answers received from the resampling method. Next, $Z$ is subsituted into $Y$ in order to see the change.
+
+<<ans22,cache=TRUE>>=
+# Standard normal random variable Z
+# Z < -1
+pnorm(-1)
+
+# -1 < Z < 1
+pnorm(-1,lower.tail=FALSE)-pnorm(1,lower.tail=FALSE)
+
+# Z > 2
+1-pnorm(2)
+
+@
+The tail probabilites grow smaller and the within probabilities grow larger. This is because a standard normal random variable is not as fat at the tails as the t distribution. Now, $w$ is substituted into $Y$ in order to see the change.
+<<ans23,cache=TRUE>>=
+# t distribution random variable w, with 4 degrees of freedom
+
+# W < -1
+pt(-1,4)
+
+# -1 < w < 1
+pt(-1,4,lower.tail=FALSE)-pt(1,4,lower.tail=FALSE)
+
+# Y > 2
+1-pt(2,4)
+
+@
+The tail probabilites grew fatter. This is because as the number of degrees of freedom increases, the tails grow thinner.
+
+\begin{exercise}{3} State clearly the null and alternative hypothesis, calculate the test statistic, and report the p-value using \textbf{R}
+\end{exercise}
+
+\begin{Answer}{3}
+
+To test the claim that the population variance is greater than 6.2, we will perform a $\chi^{2}$ with a null of the population variance being less than orequal to 6.2 and an alternative that it is greater than 6.2
+
+\begin{align}
+H_0&:\sigma^{2}\leq{6.2}\\
+H_A&:\sigma^{2}>6.2
+\end{align}
+
+<<ans3,cache=TRUE>>=
+
+
+((18-1)*6.5)/6.2
+
+pchisq(17.82258,17,lower.tail=FALSE)
+
+@
+With a p-value of .4 and $\alpha=.01$ we do not reject the null and conclude that the popluation variance is less than or equal to 6.2.
+\end{Answer}
+
+\begin{exercise}{4} State clearly the null and alternative hypothesis, calculate the test statistic, and report the p-value using \textbf{R}.
+\end{exercise}
+
+\begin{Answer}{4}
+To test the claim that the there is a difference in the standard deviations, we will perform a $f$ test with a null of the standard deviation of fast food one ($sd_1$) and standard deviation of fast food two ($sd_2$) being the same an alternate that they are different.
+
+\begin{align}
+H_0&:sd_1=sd_2\\
+H_A&:sd_1\neq{sd_2}
+\end{align}
+
+<<ans4,cache=TRUE>>=
+4.8/3.5
+
+pf(1.371429,12,10)/2
+@
+With a p-value of .34 and $\alpha=.01$ we do not reject the null and conclude the standard deviations are equal.
+
+
+\end{Answer}
+\begin{exercise}{5} State clearly the null and alternative hypothesis, calculate the test statistic, and report the p-value using \textbf{R}.
+\end{exercise}
+
+\begin{Answer}{5}
+To test the claim that the average single-person household received at least thirty seven phone calls per month, we will perform a $t$ test with a null of the sample mean ($\bar{X}$) being equal to the population mean ($\mu$) and an alternative that they are not equal.
+
+\begin{align}
+H_0&:\bar{X}=\mu\\
+H_A&:\bar{X}\neq{\mu}
+\end{align}
+
+<<ans5,cache=TRUE>>=
+# Exercise 5
+
+(34.9-37)/(6/sqrt(29))
+
+pt(-1.88,28)/2
+
+@
+With a p-value of .017 and $\alpha=.05$, we reject the null and conclude that there is a difference in the sample mean and population mean.
+% ----------------------
+%----------------------------------------
+%     You don't have to mess with anything below this line.
+% --------------------------------------------------------------
+ 
+\end{document}

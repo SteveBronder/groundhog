@@ -1,0 +1,344 @@
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+ 
+\documentclass[12pt]{article}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+ 
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+ \usepackage{amsfonts}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+ 
+\newenvironment{theorem}[2][Theorem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemma]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Exercise]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{problem}[2][Problem]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{question}[2][Question]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Corollary]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{BaseCase}[2][Base Case]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{Answer}[2][Answer]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{Sketch}[2][Sketch]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+ 
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+ 
+\title{Homework 6}%replace X with the appropriate number
+\author{Steve Bronder\\ %replace with your name
+Statistical Inference} %if necessary, replace with your course title
+ 
+\maketitle
+ 
+\begin{exercise}{1}Let Y have a t-distribution with 9 degrees of freedom. Using (only) repeated samples from a standard normal distribution, find the following:
+
+\begin{itemize}
+  \item $P(Y<-1)$
+    \item $P(-1<Y<1)$
+      \item $P(Y>2)$
+\end{itemize}
+\end{exercise}
+
+
+\begin{Answer}{1}
+
+For this exercise a for loop is used that takes ten samples from the normal distribuion and calculates the t statistic over ten thousand iterations. We then use the \texttt{ecdf()} function to compute the emirical cumulative distribution for each probability.
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{Y.t} \hlkwb{<-} \hlkwa{NULL}
+
+\hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlnum{10000}\hlstd{) \{}
+    \hlstd{Ynorm} \hlkwb{<-} \hlkwd{rnorm}\hlstd{(}\hlnum{10}\hlstd{)}
+
+    \hlstd{Ynorm.mean} \hlkwb{<-} \hlkwd{mean}\hlstd{(Ynorm)}
+
+    \hlstd{Ynorm.var} \hlkwb{<-} \hlkwd{var}\hlstd{(Ynorm)}
+
+    \hlstd{Y.t[i]} \hlkwb{<-} \hlstd{(Ynorm.mean)}\hlopt{/}\hlstd{(Ynorm.var}\hlopt{/}\hlkwd{sqrt}\hlstd{(}\hlnum{10}\hlstd{))}
+\hlstd{\}}
+
+\hlcom{# Y < -1}
+\hlkwd{ecdf}\hlstd{(Y.t)(}\hlopt{-}\hlnum{1}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.1808
+\end{verbatim}
+\begin{alltt}
+\hlcom{# -1 < Y < 1}
+\hlnum{1} \hlopt{-} \hlkwd{ecdf}\hlstd{(Y.t)(}\hlopt{-}\hlnum{1}\hlstd{)} \hlopt{-} \hlstd{(}\hlnum{1} \hlopt{-} \hlkwd{ecdf}\hlstd{(Y.t)(}\hlnum{1}\hlstd{))}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.6386
+\end{verbatim}
+\begin{alltt}
+\hlcom{# Y > 2}
+\hlnum{1} \hlopt{-} \hlkwd{ecdf}\hlstd{(Y.t)(}\hlnum{2}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.0618
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\begin{itemize}
+  \item $P(Y<-1)=17.72\%$
+    \item $P(-1<Y<1)=64.27\%$
+      \item $P(Y>2)=6.24\%$
+\end{itemize}
+\end{Answer}
+
+\begin{exercise}{2}
+Use the \texttt{pt()} command in \textbf{R} to confirm your answers for exercise 1. Then, state how each of the three probabilities would change (greater/less than) if the random variable $Y$ were replaced with:
+\begin{itemize}
+  \item a standard normal variable $Z$
+  \item a $t$-distributed random variable $w$, with 4 degrees of freedom
+\end{itemize}
+\end{exercise}
+
+\begin{Answer}{2} 
+
+Checking answers
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# }
+\hlcom{# Y < -1}
+\hlkwd{pt}\hlstd{(}\hlopt{-}\hlnum{1}\hlstd{,}\hlnum{9}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.1717182
+\end{verbatim}
+\begin{alltt}
+\hlcom{# -1 < Y < 1}
+\hlkwd{pt}\hlstd{(}\hlopt{-}\hlnum{1}\hlstd{,}\hlnum{9}\hlstd{,}\hlkwc{lower.tail}\hlstd{=}\hlnum{FALSE}\hlstd{)}\hlopt{-}\hlkwd{pt}\hlstd{(}\hlnum{1}\hlstd{,}\hlnum{9}\hlstd{,}\hlkwc{lower.tail}\hlstd{=}\hlnum{FALSE}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.6565636
+\end{verbatim}
+\begin{alltt}
+\hlcom{# Y > 2}
+\hlnum{1}\hlopt{-}\hlkwd{pt}\hlstd{(}\hlnum{2}\hlstd{,}\hlnum{9}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.03827641
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+These answers are close the answers received from the resampling method. Next, $Z$ is subsituted into $Y$ in order to see the change.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# Standard normal random variable Z}
+\hlcom{# Z < -1}
+\hlkwd{pnorm}\hlstd{(}\hlopt{-}\hlnum{1}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.1586553
+\end{verbatim}
+\begin{alltt}
+\hlcom{# -1 < Z < 1}
+\hlkwd{pnorm}\hlstd{(}\hlopt{-}\hlnum{1}\hlstd{,}\hlkwc{lower.tail}\hlstd{=}\hlnum{FALSE}\hlstd{)}\hlopt{-}\hlkwd{pnorm}\hlstd{(}\hlnum{1}\hlstd{,}\hlkwc{lower.tail}\hlstd{=}\hlnum{FALSE}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.6826895
+\end{verbatim}
+\begin{alltt}
+\hlcom{# Z > 2}
+\hlnum{1}\hlopt{-}\hlkwd{pnorm}\hlstd{(}\hlnum{2}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.02275013
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+The tail probabilites grow smaller and the within probabilities grow larger. This is because a standard normal random variable is not as fat at the tails as the t distribution. Now, $w$ is substituted into $Y$ in order to see the change.
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# t distribution random variable w, with 4 degrees of freedom}
+
+\hlcom{# W < -1}
+\hlkwd{pt}\hlstd{(}\hlopt{-}\hlnum{1}\hlstd{,}\hlnum{4}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.1869505
+\end{verbatim}
+\begin{alltt}
+\hlcom{# -1 < w < 1}
+\hlkwd{pt}\hlstd{(}\hlopt{-}\hlnum{1}\hlstd{,}\hlnum{4}\hlstd{,}\hlkwc{lower.tail}\hlstd{=}\hlnum{FALSE}\hlstd{)}\hlopt{-}\hlkwd{pt}\hlstd{(}\hlnum{1}\hlstd{,}\hlnum{4}\hlstd{,}\hlkwc{lower.tail}\hlstd{=}\hlnum{FALSE}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.626099
+\end{verbatim}
+\begin{alltt}
+\hlcom{# Y > 2}
+\hlnum{1}\hlopt{-}\hlkwd{pt}\hlstd{(}\hlnum{2}\hlstd{,}\hlnum{4}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.05805826
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+The tail probabilites grew fatter. This is because as the number of degrees of freedom increases, the tails grow thinner.
+
+\begin{exercise}{3} State clearly the null and alternative hypothesis, calculate the test statistic, and report the p-value using \textbf{R}
+\end{exercise}
+
+\begin{Answer}{3}
+
+To test the claim that the population variance is greater than 6.2, we will perform a $\chi^{2}$ with a null of the population variance being less than orequal to 6.2 and an alternative that it is greater than 6.2
+
+\begin{align}
+H_0&:\sigma^{2}\leq{6.2}\\
+H_A&:\sigma^{2}>6.2
+\end{align}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{((}\hlnum{18}\hlopt{-}\hlnum{1}\hlstd{)}\hlopt{*}\hlnum{6.5}\hlstd{)}\hlopt{/}\hlnum{6.2}
+\end{alltt}
+\begin{verbatim}
+## [1] 17.82258
+\end{verbatim}
+\begin{alltt}
+\hlkwd{pchisq}\hlstd{(}\hlnum{17.82258}\hlstd{,}\hlnum{17}\hlstd{,}\hlkwc{lower.tail}\hlstd{=}\hlnum{FALSE}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.4001157
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+With a p-value of .4 and $\alpha=.01$ we do not reject the null and conclude that the popluation variance is less than or equal to 6.2.
+\end{Answer}
+
+\begin{exercise}{4} State clearly the null and alternative hypothesis, calculate the test statistic, and report the p-value using \textbf{R}.
+\end{exercise}
+
+\begin{Answer}{4}
+To test the claim that the there is a difference in the standard deviations, we will perform a $f$ test with a null of the standard deviation of fast food one ($sd_1$) and standard deviation of fast food two ($sd_2$) being the same an alternate that they are different.
+
+\begin{align}
+H_0&:sd_1=sd_2\\
+H_A&:sd_1\neq{sd_2}
+\end{align}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlnum{4.8}\hlopt{/}\hlnum{3.5}
+\end{alltt}
+\begin{verbatim}
+## [1] 1.371429
+\end{verbatim}
+\begin{alltt}
+\hlkwd{pf}\hlstd{(}\hlnum{1.371429}\hlstd{,}\hlnum{12}\hlstd{,}\hlnum{10}\hlstd{)}\hlopt{/}\hlnum{2}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.3435938
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+With a p-value of .34 and $\alpha=.01$ we do not reject the null and conclude the standard deviations are equal.
+
+
+\end{Answer}
+\begin{exercise}{5} State clearly the null and alternative hypothesis, calculate the test statistic, and report the p-value using \textbf{R}.
+\end{exercise}
+
+\begin{Answer}{5}
+To test the claim that the average single-person household received at least thirty seven phone calls per month, we will perform a $t$ test with a null of the sample mean ($\bar{X}$) being equal to the population mean ($\mu$) and an alternative that they are not equal.
+
+\begin{align}
+H_0&:\bar{X}=\mu\\
+H_A&:\bar{X}\neq{\mu}
+\end{align}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# Exercise 5}
+
+\hlstd{(}\hlnum{34.9}\hlopt{-}\hlnum{37}\hlstd{)}\hlopt{/}\hlstd{(}\hlnum{6}\hlopt{/}\hlkwd{sqrt}\hlstd{(}\hlnum{29}\hlstd{))}
+\end{alltt}
+\begin{verbatim}
+## [1] -1.884808
+\end{verbatim}
+\begin{alltt}
+\hlkwd{pt}\hlstd{(}\hlopt{-}\hlnum{1.88}\hlstd{,}\hlnum{28}\hlstd{)}\hlopt{/}\hlnum{2}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.0176375
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+With a p-value of .017 and $\alpha=.05$, we reject the null and conclude that there is a difference in the sample mean and population mean.
+% ----------------------
+%----------------------------------------
+%     You don't have to mess with anything below this line.
+% --------------------------------------------------------------
+ 
+\end{document}
